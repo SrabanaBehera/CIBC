@@ -1,0 +1,34 @@
+ Write SQL statements for the following
+
+a.       Display city name of the customer where he/she is staying currently.
+
+b.      Display current monthly salary of the customer
+
+c.       Display Other income of customer
+
+d.      Display total monthly income of the customer i.e, current monthly salary + other monthly income
+
+e. Find out total experience of the customer
+
+
+
+ANSWERS
+
+a)select job_location from table(select employment_details from loan_request where request_id='ABCD12345ACFGN') where resigned_dt is null;
+
+
+b)select monthly_income from table(select employment_details from loan_request where request_id='ABCD12345ACFGN') where resigned_dt is null;
+
+
+c)select other_income_details from loan_request;
+
+
+
+d)select f.monthly_income+lr.other_income_details.monthly_income from loan_request lr,table(lr.employment_details) f where request_id='ABCD12345ACFGN'and resigned_dt is null;
+
+
+e)select trunc(months_between(sysdate,min(tab.joined_dt))/12)||' '||'year'||
+  ' '||trunc(mod(months_between(sysdate,min(tab.joined_dt)),12))||' '||'month' as "TOTAL EXPERIANCE"
+  from loan_request lr,table(lr.employment_details) tab where request_id='ABCD12345ACFGN';
+
+

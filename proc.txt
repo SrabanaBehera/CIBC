@@ -1,0 +1,55 @@
+create or replace procedure st_result(p_sno student.sno%type,p_munix out student.munix%type,p_msql out student.msql%type,p_avge out student.avge%type,p_result out student.result%type,p_status out varchar2)
+is
+srec student%rowtype;
+v_status varchar2(10);
+begin
+select * into srec from student where sno=p_sno;
+if srec.munix is null or srec.msql is null then
+     srec.result:='invalid mark';
+     srec.avge:=null;
+     v_status:='invalid'
+elsif srec.munix='A' or srec.munix='D' or srec.msql='A' or srec.msql='D' then
+     srec.result:='you ware caught while cheatig idiot';
+     srec.avge:=null;
+     v_status:='invalid'
+elsif srec.munix<0 and srec.munix>100 and srec.msql<0 and srec.msql>100 then
+     srec.result:='munix and msql marks are invalid';
+     srec.avge:=null;
+     v_status:='invalid'
+elsif srec.munix<0 or srec.munix>100 then
+     srec.result:='invalid munix mark';
+     srec.avge:=null;
+     v_status:='invalid'
+elsif srec.msql<0 or srec.msql>100 then
+      srec.result:='invalid msql mark';
+      srec.avge:=null;
+      v_status:='invalid'
+elsif srec.munix<70 or srec.msql<70 then
+      srec.result:='failed';
+      srec.avge:=(srec.munix+srec.msql)/2;
+      v_status:='success';
+else
+    srec.avge:=(srec.munix+srec.msql)/2;
+    if srec.avge>=90 then
+         srec.result:='grade A';
+    elsif srec.avge>=80 and srec.avge<90 then
+         srec.result:='grade B';
+    elsif srec.avge>=70 and srec.avge<80 then
+         srec.result:='grade C';
+    else
+         srec.result:='failed';
+    end if;
+    
+     v_status:='success';
+end if;
+update student set avge=srec.avge,result=srec.result where sno=p_sno;
+ p_munix:=srec.munix;
+ p_msql:=srec.msql;
+ p_avge:=srec.avge;
+ p_status:=v_status;
+ p_result:=srec.result;
+exception
+when no_data_found then
+p_status:='invalid';
+end;
+/

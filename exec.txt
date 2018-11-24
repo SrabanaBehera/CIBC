@@ -1,0 +1,21 @@
+declare
+v_sno student.sno%type;
+v_munix student.munix%type;
+v_msql student.msql%type;
+v_avge student.avge%type;
+v_result student.result%type;
+v_status varchar2(10);
+begin
+v_sno:=&v_sno;
+
+st_result(v_sno,v_munix,v_msql,v_avge,v_result,v_status);
+
+
+dbms_output.put_line('student number:'||v_sno);
+dbms_output.put_line('munix mark:'||v_munix);
+dbms_output.put_line('msql mark:'||v_msql);
+dbms_output.put_line('student average:'||v_avge);
+dbms_output.put_line('student result:'||v_result);
+dbms_output.put_line('status:'||v_status);
+end;
+/
